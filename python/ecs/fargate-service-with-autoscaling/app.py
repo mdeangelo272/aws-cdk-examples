@@ -28,6 +28,7 @@ class AutoScalingFargateService(core.Stack):
             cluster=cluster,
             task_image_options={
                 'image': ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
+                #'image': ecs.ContainerImage.from_registry("mdeangelo272/prototype:fastapi")
             }
         )
 
