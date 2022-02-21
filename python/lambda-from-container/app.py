@@ -1,18 +1,18 @@
 import os
 from aws_cdk import (
-    core,
     aws_lambda,
-    aws_ecr
+    aws_ecr,
+    App, Aws, Duration, Stack
 )
+from constructs import Construct
 
 
-class LambdaContainerFunctionStack(core.Stack):
-    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
+class LambdaContainerFunctionStack(Stack):
+    def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
 
         image_name    = "lambdaContainerFunction"
-        image_version = "latest"
 
         ##
         ## If use_pre_existing_image is True
@@ -32,9 +32,9 @@ class LambdaContainerFunctionStack(core.Stack):
             ## Container was build previously, or elsewhere.
             ## Use the pre-existing container
             ##
-            ecr_repository = aws_ecr.Repository.from_repository_attributes(self, 
-                id              = "ECR", 
-                repository_arn  = '{0}.dkr.ecr.{1}.amazonaws.com/{2}:{3}'.format(core.Aws.ACCOUNT_ID, core.Aws.REGION, image_name, image_version),
+            ecr_repository = aws_ecr.Repository.from_repository_attributes(self,
+                id              = "ECR",
+                repository_arn  ='arn:aws:ecr:{0}:{1}'.format(Aws.REGION, Aws.ACCOUNT_ID),
                 repository_name = image_name
             ) ## aws_ecr.Repository.from_repository_attributes
 
@@ -60,7 +60,7 @@ class LambdaContainerFunctionStack(core.Stack):
         ##
         ## Lambda Function
         ##
-        aws_lambda.Function(self, 
+        aws_lambda.Function(self,
           id            = "lambdaContainerFunction",
           description   = "Sample Lambda Container Function",
           code          = ecr_image,
@@ -74,7 +74,7 @@ class LambdaContainerFunctionStack(core.Stack):
           function_name = "sampleContainerFunction",
           memory_size   = 128,
           reserved_concurrent_executions = 10,
-          timeout       = core.Duration.seconds(10),
+          timeout       = Duration.seconds(10),
         ) ## aws_lambda.Function
 
 
@@ -82,7 +82,7 @@ class LambdaContainerFunctionStack(core.Stack):
 
 
 
-app = core.App()
+app = App()
 env = {'region': 'us-east-1'}
 
 LambdaContainerFunctionStack(app, "LambdaContainerFunctionStack", env=env)

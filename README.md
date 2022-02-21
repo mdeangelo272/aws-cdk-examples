@@ -26,6 +26,7 @@ This repo contains examples in each language supported by the CDK. Some language
 | [Python Examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/python) | _Stable_ |
 | [.NET Examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/csharp) | _Stable_ |
 | [Java Examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/java) | _Stable_ |
+| [Go Examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/go) | _Stable_ |
 
 
 ## Learning Resources <a name="Learning"></a>
@@ -38,7 +39,7 @@ While this is an excellent learning resource for the CDK, there are other resour
 - [CDK Repository](https://github.com/aws/aws-cdk)
 
 ### Unofficial/Community Resources
-- [AwsomeCDK](https://github.com/kolomied/awesome-cdk)
+- [AwesomeCDK](https://github.com/kolomied/awesome-cdk)
 
 > If you have created a CDK learning resource and would like it to be listed here, please read the related [CONTRIBUTING](https://github.com/aws-samples/aws-cdk-examples/blob/master/CONTRIBUTING.md#Resources) section for more info.
 

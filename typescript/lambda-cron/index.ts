@@ -1,7 +1,7 @@
-import events = require('@aws-cdk/aws-events');
-import targets = require('@aws-cdk/aws-events-targets');
-import lambda = require('@aws-cdk/aws-lambda');
-import cdk = require('@aws-cdk/core');
+import events = require('aws-cdk-lib/aws-events');
+import targets = require('aws-cdk-lib/aws-events-targets');
+import lambda = require('aws-cdk-lib/aws-lambda');
+import cdk = require('aws-cdk-lib');
 
 import fs = require('fs');
 
@@ -16,7 +16,7 @@ export class LambdaCronStack extends cdk.Stack {
       runtime: lambda.Runtime.PYTHON_3_6,
     });
 
-    // Run every day at 6PM UTC
+    // Run 6:00 PM UTC every Monday through Friday
     // See https://docs.aws.amazon.com/lambda/latest/dg/tutorial-scheduled-events-schedule-expressions.html
     const rule = new events.Rule(this, 'Rule', {
       schedule: events.Schedule.expression('cron(0 18 ? * MON-FRI *)')

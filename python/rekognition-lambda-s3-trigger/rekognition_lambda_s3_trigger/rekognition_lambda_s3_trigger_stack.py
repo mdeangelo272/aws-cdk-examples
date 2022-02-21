@@ -12,11 +12,12 @@ from aws_cdk import (
     aws_s3 as s3,
     aws_dynamodb as ddb,
     aws_s3_notifications as s3_notifications,
-    core
+    Stack
 )
+from constructs import Construct
 
-class RekognitionLambdaS3TriggerStack(core.Stack):
-    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
+class RekognitionLambdaS3TriggerStack(Stack):
+    def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         # create new IAM group and user
@@ -42,7 +43,7 @@ class RekognitionLambdaS3TriggerStack(core.Stack):
             self, 'RekFunction',
             runtime = _lambda.Runtime.PYTHON_3_8,
             handler = 'rekfunction.handler',
-            code = _lambda.Code.asset('rekognition_lambda_s3_trigger/lambda'),
+            code = _lambda.Code.from_asset('rekognition_lambda_s3_trigger/lambda'),
             environment = {
                 'BUCKET_NAME': bucket.bucket_name,
                 'TABLE_NAME': table.table_name
@@ -55,10 +56,12 @@ class RekognitionLambdaS3TriggerStack(core.Stack):
         statement.add_resources("*")
         lambda_function.add_to_role_policy(statement)
 
-        # create trigger for Lambda function
+        # create trigger for Lambda function with image type suffixes
         notification = s3_notifications.LambdaDestination(lambda_function)
         notification.bind(self, bucket)
-        bucket.add_object_created_notification(notification)
+        bucket.add_object_created_notification(notification, s3.NotificationKeyFilter(suffix='.jpg'))
+        bucket.add_object_created_notification(notification, s3.NotificationKeyFilter(suffix='.jpeg'))
+        bucket.add_object_created_notification(notification, s3.NotificationKeyFilter(suffix='.png'))
 
         # grant permissions for lambda to read/write to DynamoDB table and bucket
         table.grant_read_write_data(lambda_function)
